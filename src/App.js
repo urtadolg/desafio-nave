@@ -44,15 +44,16 @@ const App = () => {
     return <Loader />
   }
 
-  //let user = '12345'
-
   return (
     <ApolloProvider client={apolloClient}>
       <Theme>
         <Helmet titleTemplate='Nave.rs | %s' />
         <GlobalStyle />
         <Suspense fallback={<Loader />}>
-          <Router>{user ? <AuthenticatedApp /> : <UnauthenticatedApp />}</Router>
+          <Router>
+            {/* {user ? <AuthenticatedApp /> : <UnauthenticatedApp />} */}
+            <AuthenticatedApp />
+          </Router>
         </Suspense>
         <ReactQueryDevtools />
       </Theme>
