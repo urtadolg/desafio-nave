@@ -1,0 +1,95 @@
+{
+  "name": "react-boilerplate",
+  "description": "Boilerplate da nave",
+  "author": "Nave Team <tech@nave.rs>",
+  "license": "Private",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@apollo/client": "^3.3.7",
+    "@hookform/resolvers": "^1.3.4",
+    "@naveteam/dispatcher": "^1.1.0",
+    "@naveteam/pandora-frontend": "^1.0.4",
+    "@sentry/browser": "5.14",
+    "@styled-system/prop-types": "^5.1.5",
+    "@welldone-software/why-did-you-render": "^6.0.0-rc.1",
+    "apollo-cache-inmemory": "^1.6.6",
+    "axios": "^0.19.0",
+    "date-fns": "^2.18.0",
+    "graphql": "^15.5.0",
+    "graphql-anywhere": "^4.2.7",
+    "graphql-tag": "^2.11.0",
+    "react": "^17.0.1",
+    "react-apollo": "^3.1.5",
+    "react-app-polyfill": "^1.0.6",
+    "react-datepicker": "^3.6.0",
+    "react-dom": "^17.0.1",
+    "react-helmet": "^5.2.1",
+    "react-hook-form": "^6.15.1",
+    "react-is": "^16.13.1",
+    "react-query": "^3.9.8",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "^3.3.0",
+    "react-text-mask": "^5.4.3",
+    "sanitize.css": "^11.0.0",
+    "styled-components": "^5.0.1",
+    "styled-system": "^5.1.5",
+    "yup": "^0.28.4"
+  },
+  "scripts": {
+    "start": "rescripts start",
+    "build": "REACT_APP_NODE_ENV=production rescripts build",
+    "test": "rescripts test --passWithNoTests",
+    "eject": "rescripts eject",
+    "commit": "npx git-cz"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.6.0",
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@rescripts/cli": "^0.0.14",
+    "@rescripts/rescript-env": "^0.0.12",
+    "@rescripts/rescript-use-babel-config": "^0.0.10",
+    "@rescripts/rescript-use-eslint-config": "^0.0.11",
+    "@testing-library/react": "^10.0.1",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "commitlint": "^8.1.0",
+    "cz-conventional-changelog": "^3.0.2",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-config-standard": "^14.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.0.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^4.2.3",
+    "jest-styled-components": "^7.0.0",
+    "lint-staged": "^10.1.3",
+    "prettier": "^2.0.1",
+    "prop-types": "^15.7.2",
+    "react-test-renderer": "^16.9.0",
+    "start-server-and-test": "^1.10.0",
+    "stylelint": "^13.2.1",
+    "tslint": "^6.1.0",
+    "typescript": "^3.8.3"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "lint-staged": {
+    "*.{js, jsx}": [
+      "prettier --write"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
