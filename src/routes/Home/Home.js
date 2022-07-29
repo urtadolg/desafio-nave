@@ -1,10 +1,10 @@
 import React, { Fragment, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
+import { useQuery } from 'react-query'
 
 import Column from 'components/Column'
 import Text from 'components/Text'
-
 import Row from 'components/Row'
 import Image from 'components/Image'
 
@@ -17,6 +17,9 @@ import deleteIcon from 'assets/icons/delete.png'
 import Button from 'components/Button'
 import ModalDelete from './ModalDelete'
 import ModalNaverDetails from './ModalNaverDetails'
+import axios from 'axios'
+import { getToken } from 'helpers'
+import Loader from 'components/Loader'
 
 const naversList = [
   {
@@ -41,10 +44,22 @@ const naversList = [
   }
 ]
 
+const fetchNavers = async () => {
+  const userToken = getToken()
+
+  const response = await axios.get(`${process.env.REACT_APP_API_URL}v1/navers`, {
+    headers: { Authorization: `Bearer ${userToken}` }
+  })
+
+  return response.data
+}
+
 const Home = () => {
   const history = useHistory()
   const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false)
   const [isNaverDetailsModalOpened, setIsNaverDetailsModalOpened] = useState(false)
+
+  const { isLoading, isError, data } = useQuery('navers', fetchNavers)
 
   const onCloseHandler = () => {
     setIsDeleteModalOpened(false)
@@ -62,23 +77,27 @@ const Home = () => {
             Adicionar Naver
           </Button>
         </Row>
-        <Row as='ul' flexWrap='wrap' justifyContent='space-between' marginTop={32}>
-          {naversList.map((item, index) => {
-            return (
-              <NaversItem key={index}>
-                <Image src={item.img} alt={item.name} onClick={() => setIsNaverDetailsModalOpened(true)} />
-                <div>
-                  <Text fontWeight={600}>{item.name}</Text>
-                  <Text>{item.role}</Text>
-                </div>
-                <ControllersContainer>
-                  <Image onClick={() => history.push('/usuarios/123')} src={editIcon} alt={'Edit'} />
-                  <Image onClick={() => setIsDeleteModalOpened(true)} src={deleteIcon} alt={'Delete'} />
-                </ControllersContainer>
-              </NaversItem>
-            )
-          })}
-        </Row>
+        <NaversList as='ul' flexWrap='wrap' justifyContent='flex-start'>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            data.map((item, index) => {
+              return (
+                <NaversItem key={index}>
+                  <Image src={naver1} alt={item.name} onClick={() => setIsNaverDetailsModalOpened(true)} />
+                  <div>
+                    <Text fontWeight={600}>{item.name}</Text>
+                    <Text>{item.job_role}</Text>
+                  </div>
+                  <ControllersContainer>
+                    <Image onClick={() => history.push(`/navers/${item.id}`)} src={editIcon} alt={'Edit'} />
+                    <Image onClick={() => setIsDeleteModalOpened(true)} src={deleteIcon} alt={'Delete'} />
+                  </ControllersContainer>
+                </NaversItem>
+              )
+            })
+          )}
+        </NaversList>
       </Column>
       <ModalDelete isOpen={isDeleteModalOpened} onClose={onCloseHandler} />
       <ModalNaverDetails isOpen={isNaverDetailsModalOpened} onClose={onCloseHandler} />
@@ -94,6 +113,10 @@ const NaversItem = styled.li`
   img {
     cursor: pointer;
   }
+`
+
+const NaversList = styled(Row)`
+  gap: 32px;
 `
 
 const ControllersContainer = styled(Row)`

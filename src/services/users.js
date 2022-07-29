@@ -4,9 +4,13 @@ import { formatDateToApi, formatDateFromApi, formatIsoString } from 'helpers'
 import { format } from 'date-fns'
 
 export const getUserById = async ({ queryKey: [key, id] }) => {
-  const response = await client.get(`/v1/users/${id}`)
+  const response = await client.get(`/v1/navers/${id}`)
 
-  return { ...response, birthdate: formatDateFromApi(response.birthdate) }
+  return {
+    ...response,
+    birthdate: formatDateFromApi(response.birthdate),
+    admission_date: formatDateFromApi(response.admission_date)
+  }
 }
 
 export const getAllRoles = async () => {
@@ -28,15 +32,23 @@ export const getUsers = async params => {
   }
 }
 
-export const createUser = ({ birthdate, ...data }) =>
-  client.post('/v1/users/signup', { ...data, birthdate: formatDateToApi(birthdate) })
+export const createUser = ({ birthdate, admission_date, ...data }) =>
+  client.post('/v1/navers', {
+    ...data,
+    birthdate: formatDateFromApi(birthdate),
+    admission_date: formatDateFromApi(admission_date)
+  })
 
-export const updateUser = (id, { birthdate, ...data }) =>
-  client.put(`/v1/users/${id}`, { ...data, birthdate: formatDateToApi(birthdate) })
+export const updateUser = (id, { birthdate, admission_date, ...data }) =>
+  client.put(`/v1/navers/${id}`, {
+    ...data,
+    birthdate: formatDateFromApi(birthdate),
+    admission_date: formatDateFromApi(admission_date)
+  })
 
-export const deleteUser = id => client.delete(`/v1/users/${id}`)
+export const deleteUser = async id => await client.delete(`/v1/users/${id}`)
 
-export const getUser = () => client.get('/v1/me')
+export const getUser = async () => await client.get('/v1/users/d956bb14-5b5d-4757-a3aa-25f90da7774e')
 
 // example of a graphql query
 export const GET_USER = gql`

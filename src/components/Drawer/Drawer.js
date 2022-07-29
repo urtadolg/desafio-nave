@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import { Link as RouterLink } from 'react-router-dom'
 import Image from 'components/Image'
 import Button from 'components/Button'
 import { useUser } from 'context/user-context'
+import { clearToken } from 'helpers'
+import { useQueryClient } from 'react-query'
 
 const NAV_BAR_HEIGHT = 60
 const SIDE_BAR_WIDTH = 200

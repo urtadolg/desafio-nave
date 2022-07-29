@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 import { getUser, login as loginService } from 'services/users'
 import { setAccessToken, setRefreshToken, clearToken, getToken } from 'helpers'
-import { getAllRoles } from 'services/users'
+//import { getAllRoles } from 'services/users'
 
 const UserContext = createContext()
 
@@ -22,14 +22,13 @@ const UserProvider = props => {
 
   const { data: user, isLoading } = useQuery('user', getUser, { enabled: Boolean(getToken()) })
 
-  const { data: userRoles, isFetching: isLoadingRoles } = useQuery('roles', getAllRoles, {
+  /*   const { data: userRoles, isFetching: isLoadingRoles } = useQuery('roles', getAllRoles, {
     enabled: Boolean(getToken())
-  })
+  }) */
 
-  const { mutate: login } = useMutation(loginService, {
-    onSuccess: async ({ access_token, refresh_token, ...user }) => {
-      setAccessToken(access_token)
-      setRefreshToken(refresh_token)
+  const { mutate: login, isLoading: isLoggingIn } = useMutation(loginService, {
+    onSuccess: async ({ token, ...user }) => {
+      setAccessToken(token)
       queryClient.setQueryData('user', user)
     }
   })
@@ -45,13 +44,14 @@ const UserProvider = props => {
       Sentry.configureScope(scope =>
         scope.setUser({
           // Adicionar outras informações relevantes do usuários
-          email: user.email
+          email: user.email,
+          id: user.id
         })
       )
     }
   }, [user])
 
-  return <UserContext.Provider value={{ user, isLoading, login, logout, userRoles, isLoadingRoles }} {...props} />
+  return <UserContext.Provider value={{ user, isLoading, isLoggingIn, login, logout }} {...props} />
 }
 
 export { UserProvider, useUser }

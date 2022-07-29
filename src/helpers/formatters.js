@@ -12,7 +12,7 @@ export const limitString = (string, limit) => {
 
 export const formatIsoString = isoString => format(new Date(isoString))
 
-export const formatDateToApi = date => parse(date, 'dd/MM/yyyy', new Date()).toISOString()
+export const formatDateToApi = date => parse(date, 'yyyy-MM-dd', new Date()).toISOString()
 
 export const formatDateFromApi = date =>
-  fnsFormat(addMinutes(new Date(date), new Date().getTimezoneOffset()), 'dd/MM/yyyy')
+  fnsFormat(addMinutes(new Date(date), new Date().getTimezoneOffset()), 'yyyy-MM-dd')

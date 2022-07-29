@@ -17,7 +17,7 @@ import { userFormResolver } from 'helpers/yup-schemas'
 import { getUserById, updateUser, createUser, deleteUser } from 'services/users'
 import { useModal } from 'context/modal-context'
 import { useUser } from 'context/user-context'
-import { dateMask } from 'helpers'
+import { dateMask, formatDateFromApi, formatDateToApi } from 'helpers'
 import styled from 'styled-components'
 
 const UserForm = () => {
@@ -38,7 +38,7 @@ const UserForm = () => {
   const { id } = useParams()
   const history = useHistory()
 
-  const { isFetching: isLoadingUser, data: user } = useQuery(['userById', id], getUserById, {
+  const { isFetching: isLoadingUser, data: user } = useQuery(['naver', id], getUserById, {
     enabled: !!id
   })
 
@@ -46,14 +46,26 @@ const UserForm = () => {
     reset({
       name: user?.name || '',
       email: user?.email || '',
-      role_id: user?.role?.id || '',
-      birthdate: user?.birthdate || ''
+      job_role: user?.job_role || '',
+      project: user?.project || '',
+      url: user?.url || '',
+      birthdate: user?.birthdate || '',
+      admission_date: user?.admission_date || ''
     })
   }, [user, reset])
 
+  /*   {
+	"job_role": "Dev",
+	"admission_date": "20/10/2019",
+	"birthdate": "12/04/1992",
+	"name": "Christian Tavares",
+	"project": "Recrutamento",
+	"url": "test-path/image-test.png"
+} */
+
   const isLoading = useMemo(() => isLoadingRoles || isLoadingUser, [isLoadingRoles, isLoadingUser])
 
-  const onSubmit = async ({ confirmPassword, ...values }) => {
+  const onSubmit = async ({ ...values }) => {
     try {
       id ? await updateUser(id, values) : await createUser(values)
       handleOpenModal({
@@ -137,50 +149,50 @@ const UserForm = () => {
             width='100%'
             maxWidth={280}
             label='Cargo'
-            name='role'
+            name='job_role'
             ref={register}
             placeholder='Cargo'
-            error={errors?.role?.message}
+            error={errors?.job_role?.message}
             type='text'
           />
           <Input
             width='100%'
             maxWidth={280}
-            label='Idade'
-            name='age'
+            label='Data de nascimento'
+            name='birthdate'
             ref={register}
-            placeholder='Idade'
-            error={errors?.age?.message}
-            type='number'
+            placeholder='Data de nascimento'
+            error={errors?.birthdate?.message}
+            type='date'
           />
           <Input
             width='100%'
             maxWidth={280}
-            label='Tempo de empresa'
-            name='workingPeriod'
+            label='Data de admissão'
+            name='admission_date'
             ref={register}
-            placeholder='Tempo de empresa'
-            error={errors?.workingPeriod?.message}
-            type='number'
+            placeholder='Data de admissão'
+            error={errors?.admission_date?.message}
+            type='date'
           />
           <Input
             width='100%'
             maxWidth={280}
             label='Projetos que participou'
-            name='projects'
+            name='project'
             ref={register}
             placeholder='Projetos que participou'
-            error={errors?.projects?.message}
+            error={errors?.project?.message}
             type='text'
           />
           <Input
             width='100%'
             maxWidth={280}
             label='URL da foto do Naver'
-            name='photoUrl'
+            name='url'
             ref={register}
             placeholder='URL da foto do Naver'
-            error={errors?.photoUrl?.message}
+            error={errors?.url?.message}
             type='text'
           />
         </Row>

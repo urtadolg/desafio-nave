@@ -1,5 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useMutation, useQueryClient } from 'react-query'
+import axios from 'axios'
 
 import Column from 'components/Column'
 import Input from 'components/Input'
@@ -9,9 +11,26 @@ import { useUser } from 'context/user-context'
 
 import { loginResolver } from 'helpers/yup-schemas'
 import Image from 'components/Image'
+import Loader from 'components/Loader'
+import { setAccessToken } from 'helpers'
+import Text from 'components/Text'
 
 const Login = () => {
-  const { login } = useUser()
+  //const { login, isLoggingIn } = useUser()
+  const queryClient = useQueryClient()
+
+  const onLoginHandler = async data => {
+    const result = await axios.post(`${process.env.REACT_APP_API_URL}v1/users/login`, {
+      email: data.email,
+      password: data.password
+    })
+
+    //localStorage.setItem('userToken', result.data.token)
+    setAccessToken(result.data.token)
+    queryClient.setQueryData('user', result.data)
+  }
+
+  const { isLoading: isLoggingIn, isError, error, data, isSuccess, mutate } = useMutation(data => onLoginHandler(data))
 
   const { register, handleSubmit, errors, formState } = useForm({ resolver: loginResolver })
 
@@ -20,7 +39,7 @@ const Login = () => {
       <Column
         border='1px solid #212121'
         as='form'
-        onSubmit={handleSubmit(login)}
+        onSubmit={handleSubmit(data => mutate(data))}
         px={32}
         py={40}
         alignItems='center'
@@ -45,8 +64,8 @@ const Login = () => {
           type='password'
           width='100%'
         />
-        <Button width='100%' bg='purple' isLoading={formState.isSubmitting}>
-          Entrar
+        <Button width='100%' minHeight={30} bg='purple' isLoading={formState.isSubmitting}>
+          {isLoggingIn ? <Loader /> : 'Entrar'}
         </Button>
       </Column>
     </Column>

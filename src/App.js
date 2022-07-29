@@ -4,6 +4,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { createGlobalStyle } from 'styled-components'
 import { ApolloProvider } from '@apollo/client'
+import { ModalProvider } from 'context/modal-context'
 import Helmet from 'react-helmet'
 
 import Loader from 'components/Loader'
@@ -47,15 +48,14 @@ const App = () => {
   return (
     <ApolloProvider client={apolloClient}>
       <Theme>
-        <Helmet titleTemplate='Nave.rs | %s' />
-        <GlobalStyle />
-        <Suspense fallback={<Loader />}>
-          <Router>
-            {/* {user ? <AuthenticatedApp /> : <UnauthenticatedApp />} */}
-            <AuthenticatedApp />
-          </Router>
-        </Suspense>
-        <ReactQueryDevtools />
+        <ModalProvider>
+          <Helmet titleTemplate='Nave.rs | %s' />
+          <GlobalStyle />
+          <Suspense fallback={<Loader />}>
+            <Router>{user ? <AuthenticatedApp /> : <UnauthenticatedApp />}</Router>
+          </Suspense>
+          <ReactQueryDevtools />
+        </ModalProvider>
       </Theme>
     </ApolloProvider>
   )

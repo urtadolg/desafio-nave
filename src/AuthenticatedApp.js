@@ -14,7 +14,7 @@ const AuthenticatedApp = () => (
       <Route path='/home' component={Home} />
       <Route path='/dashboard' component={Dashboard} />
       <Route exact path='/usuarios' component={UsersList} />
-      <Route exact path={['/usuarios/criar', '/usuarios/:id']} component={UserForm} />
+      <Route exact path={['/usuarios/criar', '/navers/:id']} component={UserForm} />
       <Redirect to='/home' />
     </Switch>
   </Drawer>

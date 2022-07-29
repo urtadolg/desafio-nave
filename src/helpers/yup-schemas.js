@@ -18,20 +18,23 @@ const yupShapeWithResolver = shape => yupResolver(yup.object().shape(shape))
 
 export const loginResolver = yupShapeWithResolver({
   email: yup.string().email('Insira um e-mail válido').required(),
-  password: yup.string().required()
+  password: yup.string().required('Insira uma senha')
 })
 
 export const userFormResolver = yupShapeWithResolver({
-  email: yup.string().email('Insira um e-mail válido').required(),
-  name: yup.string().min(2, 'Mínimo de 2 caracteres no campo').required(),
-  role_id: yup.number().transform(emptyStringToNull).nullable().required(),
-  birthdate: yup
-    .string()
-    .matches(/^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/, 'Insira uma data válida')
-    .required(),
-  password: yup.string().min(2, 'Mínimo de 2 caracteres no campo').required(),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'As senhas não são iguais')
-    .required()
+  admission_date: yup.string().required('Insira uma data de Admissão'),
+  name: yup.string().min(2, 'Mínimo de 2 caracteres no campo').required('Insira um Nome'),
+  job_role: yup.string().required('Insira um Cargo'),
+  birthdate: yup.string().required('Insira uma data'),
+  project: yup.string().required('Insira um projeto'),
+  url: yup.string().required('Insira uma imagem de perfil')
 })
+
+/*   {
+	"job_role": "Dev",
+	"admission_date": "20/10/2019",
+	"birthdate": "12/04/1992",
+	"name": "Christian Tavares",
+	"project": "Recrutamento",
+	"url": "test-path/image-test.png"
+} */

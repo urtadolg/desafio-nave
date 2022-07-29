@@ -97,4 +97,5 @@ const useModal = () => {
   }
   return context
 }
+
 export { ModalProvider, useModal }
