@@ -89,10 +89,6 @@ const Home = () => {
                     <Text fontWeight={600}>{item.name}</Text>
                     <Text>{item.job_role}</Text>
                   </div>
-                  <ControllersContainer>
-                    <Image onClick={() => history.push(`/navers/${item.id}`)} src={editIcon} alt={'Edit'} />
-                    <Image onClick={() => setIsDeleteModalOpened(true)} src={deleteIcon} alt={'Delete'} />
-                  </ControllersContainer>
                 </NaversItem>
               )
             })
@@ -117,10 +113,6 @@ const NaversItem = styled.li`
 
 const NaversList = styled(Row)`
   gap: 32px;
-`
-
-const ControllersContainer = styled(Row)`
-  gap: 16px;
 `
 
 export default Home

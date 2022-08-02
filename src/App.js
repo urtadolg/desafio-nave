@@ -52,7 +52,7 @@ const App = () => {
           <Helmet titleTemplate='Nave.rs | %s' />
           <GlobalStyle />
           <Suspense fallback={<Loader />}>
-            <Router>{user ? <AuthenticatedApp /> : <UnauthenticatedApp />}</Router>
+            <Router>{/* user */ true ? <AuthenticatedApp /> : <UnauthenticatedApp />}</Router>
           </Suspense>
           <ReactQueryDevtools />
         </ModalProvider>
