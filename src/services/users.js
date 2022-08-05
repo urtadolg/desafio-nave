@@ -1,6 +1,6 @@
 import client from 'providers/fetchClient'
 import { gql } from '@apollo/client'
-import { formatDateToApi, formatDateFromApi, formatIsoString } from 'helpers'
+import { formatDateFromApi, formatIsoString } from 'helpers'
 import { format } from 'date-fns'
 
 export const getUserById = async ({ queryKey: [key, id] }) => {
@@ -35,16 +35,20 @@ export const getUsers = async params => {
 export const createUser = ({ birthdate, admission_date, ...data }) =>
   client.post('/v1/navers', {
     ...data,
-    birthdate: formatDateFromApi(birthdate),
-    admission_date: formatDateFromApi(admission_date)
+    birthdate: formatIsoString(birthdate),
+    admission_date: formatIsoString(admission_date)
   })
 
-export const updateUser = (id, { birthdate, admission_date, ...data }) =>
+export const updateUser = (id, { birthdate, admission_date, ...data }) => {
+  const formatedBirthdate = formatIsoString(birthdate)
+  const formatedAdmissionDate = formatIsoString(admission_date)
+
   client.put(`/v1/navers/${id}`, {
     ...data,
-    birthdate: formatDateFromApi(birthdate),
-    admission_date: formatDateFromApi(admission_date)
+    birthdate: formatedBirthdate,
+    admission_date: formatedAdmissionDate
   })
+}
 
 export const deleteUser = async id => await client.delete(`/v1/users/${id}`)
 

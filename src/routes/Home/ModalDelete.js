@@ -4,7 +4,6 @@ import Modal from 'components/Modal'
 import Row from 'components/Row'
 import Text from 'components/Text'
 import React from 'react'
-import styled from 'styled-components'
 
 const ModalDelete = ({ isOpen, onClose }) => {
   return (

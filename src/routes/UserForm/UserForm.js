@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { useParams, useHistory } from 'react-router-dom'
 import { useQuery } from 'react-query'
@@ -23,6 +23,7 @@ import styled from 'styled-components'
 const UserForm = () => {
   const { handleOpenModal, handleCloseModal } = useModal()
   const { userRoles, isLoadingRoles } = useUser()
+  const [isLoadingRequest, setIsLoadingRequest] = useState(false)
 
   const {
     handleSubmit,
@@ -54,26 +55,20 @@ const UserForm = () => {
     })
   }, [user, reset])
 
-  /*   {
-	"job_role": "Dev",
-	"admission_date": "20/10/2019",
-	"birthdate": "12/04/1992",
-	"name": "Christian Tavares",
-	"project": "Recrutamento",
-	"url": "test-path/image-test.png"
-} */
-
   const isLoading = useMemo(() => isLoadingRoles || isLoadingUser, [isLoadingRoles, isLoadingUser])
 
   const onSubmit = async ({ ...values }) => {
     try {
+      setIsLoadingRequest(true)
       id ? await updateUser(id, values) : await createUser(values)
+      setIsLoadingRequest(false)
       handleOpenModal({
         type: 'success',
         content: id ? 'Usuário atualizado com sucesso' : 'Usuário criado com sucesso',
         onClose: () => history.goBack()
       })
     } catch (err) {
+      setIsLoadingRequest(false)
       handleOpenModal({ type: 'error' })
     }
   }
@@ -95,25 +90,6 @@ const UserForm = () => {
 
   return (
     <Column alignItems='center'>
-      {!!id && (
-        <Row width='100%' justifyContent='flex-end'>
-          <Button
-            backgroundColor='red'
-            type='button'
-            fontWeight='bold'
-            onClick={() =>
-              handleOpenModal({
-                type: 'confirmation',
-                title: 'Atenção',
-                content: 'Tem certeza de que deseja excluir o usuário?',
-                onConfirm: handleDeleteUser
-              })
-            }
-          >
-            Excluir
-          </Button>
-        </Row>
-      )}
       <Column
         as='form'
         width='100%'
@@ -204,7 +180,7 @@ const UserForm = () => {
           disabled={isSubmitting}
           mt={20}
         >
-          Salvar
+          {isLoadingRequest ? <Loader /> : 'Salvar'}
         </SubmitButton>
       </Column>
     </Column>

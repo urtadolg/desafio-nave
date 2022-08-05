@@ -5,6 +5,7 @@ import Modal from 'components/Modal'
 import Row from 'components/Row'
 import Loader from 'components/Loader'
 import Text from 'components/Text'
+import Column from 'components/Column'
 
 const CONFIRMATION_TYPE = 'confirmation'
 const ERROR_TYPE = 'error'
@@ -28,6 +29,7 @@ const ModalProvider = ({ children }) => {
     setIsLoading(true)
     await modalData?.onConfirm()
     setIsLoading(false)
+    handleCloseModal()
   }, [modalData])
 
   const isConfirmationType = useMemo(() => modalData?.type === CONFIRMATION_TYPE, [modalData])
@@ -65,27 +67,32 @@ const ModalProvider = ({ children }) => {
   return (
     <ModalContext.Provider value={{ handleOpenModal, handleCloseModal }}>
       {children}
-      <Modal minWidth={300} isOpen={!!modalData}>
-        <Text variant='big'>{modalContent.title}</Text>
-        <Row>{modalContent.content}</Row>
+      <Modal minWidth={300} isOpen={!!modalData} borderRadius={0} padding={32} width={592} height={233} zIndex={20}>
+        <Column height='100%' justifyContent='space-between'>
+          <Text variant='big' fontWeight={600}>
+            {modalContent.title}
+          </Text>
+          <Row>{modalContent.content}</Row>
 
-        <Row justifyContent={!isConfirmationType ? 'center' : 'flex-start'} mt={10}>
-          <Button
-            width={isConfirmationType ? '50%' : '100%'}
-            backgroundColor={modalData?.type === SUCCESS_TYPE ? 'green' : 'gray'}
-            p={10}
-            mr={isConfirmationType ? 3 : 0}
-            onClick={handleCloseModal}
-            fontWeight='bold'
-          >
-            {modalContent.closeTitle}
-          </Button>
-          {isConfirmationType && (
-            <Button width='50%' backgroundColor='purple' fontWeight='bold' p={10} onClick={handleConfirm}>
-              {isLoading ? <Loader /> : 'Confirmar'}
+          <Row justifyContent={!isConfirmationType ? 'center' : 'flex-start'}>
+            <Button
+              width={isConfirmationType ? '50%' : '100%'}
+              onClick={handleCloseModal}
+              border='1px solid #212121'
+              backgroundColor='white'
+              color='#212121'
+              fontWeight={600}
+              mr={24}
+            >
+              {modalContent.closeTitle}
             </Button>
-          )}
-        </Row>
+            {isConfirmationType && (
+              <Button width='50%' fontWeight='bold' p={10} onClick={handleConfirm}>
+                {isLoading ? <Loader /> : 'Confirmar'}
+              </Button>
+            )}
+          </Row>
+        </Column>
       </Modal>
     </ModalContext.Provider>
   )
